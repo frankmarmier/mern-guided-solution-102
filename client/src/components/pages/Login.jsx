@@ -1,22 +1,17 @@
 import React from "react";
-import api from "../../api";
+import { Redirect } from "react-router-dom";
 
 class Login extends React.Component {
   state = {
     password: "",
-    username: "",
+    email: "",
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    api
-      .login(this.state.username, this.state.password)
-      .then((result) => {
-        // Find a way to log the user :)
-        this.props.history.push("/"); // Redirect to the home page
-      })
+    this.props
+      .handleSignin({ email: this.state.email, password: this.state.password })
       .catch((err) => {
-        console.log(err);
         this.setState({ message: err.toString() });
       });
   };
@@ -27,6 +22,10 @@ class Login extends React.Component {
   };
 
   render() {
+    if (this.props.isLoggedIn) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="Login">
         <h2>Login</h2>
@@ -34,8 +33,8 @@ class Login extends React.Component {
           Username:{" "}
           <input
             type="text"
-            name="username"
-            value={this.state.name}
+            name="email"
+            value={this.state.email}
             onChange={this.handleChange}
           />{" "}
           <br />

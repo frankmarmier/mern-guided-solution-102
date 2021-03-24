@@ -35,18 +35,36 @@ export default {
       .catch(errHandler);
   },
 
-  login(username, password) {
+  login(userInfo) {
     return service
-      .post("/login", {
-        name: username,
-        password,
-      })
+      .post("/signin", userInfo)
+      .then((res) => res.data)
+      .catch(errHandler);
+  },
+
+  getStreetArts() {
+    return service
+      .get("/street-arts")
+      .then((res) => res.data)
+      .catch(errHandler);
+  },
+
+  getStreetArt(streetArtId) {
+    return service
+      .get("/street-arts/" + streetArtId)
+      .then((res) => res.data)
+      .catch(errHandler);
+  },
+
+  addStreetArt(uploadData) {
+    return service
+      .post("/street-arts", uploadData)
       .then((res) => res.data)
       .catch(errHandler);
   },
 
   logout() {
-    return service.get("/logout");
+    return service.delete("/logout");
   },
 
   // This is an example on how to use this method in a different file

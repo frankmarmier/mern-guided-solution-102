@@ -1,10 +1,10 @@
 import React from "react";
 import api from "../../api";
+import { Redirect } from "react-router-dom";
 
 class Signup extends React.Component {
   state = {
-    username: "",
-    name: "",
+    email: "",
     password: "",
     message: null,
   };
@@ -17,37 +17,33 @@ class Signup extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     let data = {
-      username: this.state.username,
-      name: this.state.name,
+      email: this.state.email,
       password: this.state.password,
     };
 
     api
       .signup(data)
       .then((result) => {
-        this.props.history.push("/"); // Redirect to the home page
+        this.props.history.push("/login");
       })
       .catch((err) => this.setState({ message: err.toString() }));
   };
 
   render() {
+    if (this.props.isLoggedIn) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <div className="Signup">
         <h2>Signup</h2>
         <form onSubmit={this.handleSubmit}>
-          Username:{" "}
-          <input
-            type="text"
-            value={this.state.username}
-            name="username"
-            onChange={this.handleChange}
-          />{" "}
           <br />
-          Name:{" "}
+          Email:{" "}
           <input
             type="text"
-            value={this.state.name}
-            name="name"
+            value={this.state.email}
+            name="email"
             onChange={this.handleChange}
           />{" "}
           <br />

@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const logger = require("morgan");
 
 const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo");
 
 const app = express();
 
@@ -30,12 +30,13 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   })
 );
 
 app.use("/api", require("./routes/auth"));
-app.use("/api/countries", require("./routes/countries"));
+app.use("/api/street-arts", require("./routes/streetArts"));
+app.use("/api", require("./routes/visits"));
 
 // For any routes that starts with "/api", catch 404 and forward to error handler
 app.use("/api/*", (req, res, next) => {
